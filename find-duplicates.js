@@ -74,7 +74,7 @@ function getAllFiles(dirPath, arrayOfFiles = []) {
 // Function to find duplicate files
 function findDuplicates() {
   log('\n🔍 Scanning for duplicate files...\n', 'cyan');
-  log('=' .repeat(50), 'cyan');
+  log('='.repeat(50), 'cyan');
 
   const allFiles = getAllFiles('.');
   const fileHashes = new Map();
@@ -114,16 +114,20 @@ function findDuplicates() {
       
       // Show all files in this duplicate group
       files.forEach((filePath, index) => {
-        const stats = fs.statSync(filePath);
-        const sizeKB = (stats.size / 1024).toFixed(2);
-        const relativePath = path.relative('.', filePath);
-        
-        if (index === 0) {
-          log(`   📁 Keep: ${relativePath} (${sizeKB} KB)`, 'green');
-        } else {
-          log(`   🗑️  Remove: ${relativePath} (${sizeKB} KB)`, 'red');
-          totalSizeSaved += stats.size;
-          totalDuplicates++;
+        try {
+          const stats = fs.statSync(filePath);
+          const sizeKB = (stats.size / 1024).toFixed(2);
+          const relativePath = path.relative('.', filePath);
+          
+          if (index === 0) {
+            log(`   📁 Keep: ${relativePath} (${sizeKB} KB)`, 'green');
+          } else {
+            log(`   🗑️  Remove: ${relativePath} (${sizeKB} KB)`, 'red');
+            totalSizeSaved += stats.size;
+            totalDuplicates++;
+          }
+        } catch (error) {
+          log(`   ❌ Error accessing file: ${filePath}`, 'red');
         }
       });
       

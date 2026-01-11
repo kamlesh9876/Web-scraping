@@ -52,7 +52,7 @@ scraper-service/
 
 1. Install dependencies:
 ```bash
-npm install
+npm run install:all
 ```
 
 2. Set up environment variables:
@@ -63,13 +63,34 @@ cp .env.example .env
 
 3. Run the application:
 ```bash
-# Development
+# Development (both backend and frontend)
+npm run dev
+
+# Backend only
 npm run start:dev
 
-# Production
+# Frontend only
+npm run dev:frontend
+
+# Production (backend only)
 npm run build
 npm run start:prod
 ```
+
+## Quick Start
+
+For the complete development experience:
+```bash
+npm run setup
+```
+
+This will install all dependencies and start both backend (port 3000) and frontend (port 3001).
+
+## Access Points
+
+- **Backend API**: http://localhost:3000
+- **Frontend Control Panel**: http://localhost:3001
+- **API Documentation**: http://localhost:3000/api
 
 ## Docker
 

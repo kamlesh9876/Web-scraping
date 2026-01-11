@@ -2,7 +2,7 @@ const { spawn } = require('child_process');
 const path = require('path');
 
 console.log('\n🚀 Starting World of Books Development Servers\n');
-console.log('=' .repeat(50));
+console.log('='.repeat(50));
 
 // Start backend
 console.log('📦 Starting Backend (NestJS)...');
@@ -22,12 +22,12 @@ const frontend = spawn('npm', ['run', 'dev'], {
 // Show access info
 setTimeout(() => {
   console.log('\n🎉 Servers started successfully!\n');
-  console.log('=' .repeat(50));
+  console.log('='.repeat(50));
   console.log('🌐 Backend API: http://localhost:3000');
   console.log('🌐 Frontend App: http://localhost:3001');
   console.log('📚 API Docs: http://localhost:3000/api');
   console.log('\n💡 Press Ctrl+C to stop both servers');
-  console.log('=' .repeat(50));
+  console.log('='.repeat(50));
 }, 5000);
 
 // Handle shutdown
