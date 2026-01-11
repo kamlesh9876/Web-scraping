@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { scrapingApi, systemApi } from '@/services/scraping';
 import { Button } from '@/components/Button';
-import { EnhancedStatusBadge } from '@/components/StatusBadge/enhanced';
+import { EnhancedStatusBadge as StatusBadge } from '@/components/StatusBadge/enhanced';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { ScrapeJob, SystemStatus } from '@/types/scraping';
 
@@ -242,7 +242,7 @@ export default function Dashboard() {
                 React.createElement(
                   'tr',
                   null,
-                  React.createElement(EnhancedStatusBadge, {
+                  React.createElement(StatusBadge, {
                     status: job.status,
                     children: job.status
                   }),
