@@ -114,3 +114,59 @@ docker run -p 3000:3000 scraper-service
 - **MongoDB**: Data storage
 - **BullMQ**: Job queue
 - **Redis**: Queue backend
+
+## Developer Guide
+
+### Prerequisites
+- Node.js 16+ 
+- npm 8+
+- MongoDB (running locally or connection string)
+
+### Development Scripts
+
+```bash
+# Install all dependencies (backend + frontend)
+npm run install:all
+
+# Start both backend and frontend in development mode
+npm run dev
+
+# Start only backend
+npm run dev:backend
+
+# Start only frontend
+npm run dev:frontend
+
+# Clean up project
+npm run clean
+
+# Find duplicate files
+npm run clean:duplicates
+
+# Reset everything
+npm run reset
+```
+
+### Project Structure
+
+```
+Ablespace/
+├── scripts/             # Development and utility scripts
+│   ├── cleanup/         # Maintenance scripts
+│   ├── windows/         # Windows-specific scripts
+│   ├── start-all.js     # Start all services
+│   └── start-concurrent.js # Development server runner
+├── src/                # Backend (NestJS)
+│   ├── modules/
+│   ├── common/
+│   └── main.ts
+├── frontend/           # Frontend (Next.js)
+│   ├── src/
+│   │   ├── app/
+│   │   ├── components/
+│   │   ├── hooks/
+│   └── package.json
+├── docs/               # Documentation
+│   └── archive/        # Archived planning docs
+└── package.json        # Root package with dev scripts
+```
