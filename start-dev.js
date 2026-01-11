@@ -1,4 +1,4 @@
-const { spawn } = require('child_process');
+const { spawn, execSync } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 
@@ -52,134 +52,172 @@ if (!fs.existsSync(frontendDir)) {
 const backendNodeModules = path.join(backendDir, 'node_modules');
 const frontendNodeModules = path.join(frontendDir, 'node_modules');
 
-if (!fs.existsSync(backendNodeModules)) {
-  logWarning('Backend node_modules not found. Installing dependencies...');
-  installBackendDeps();
+// Function to check if npm command is available
+function checkNpmAvailable() {
+  try {
+    execSync('npm --version', { stdio: 'ignore' });
+    return true;
+  } catch (error) {
+    logError('npm command not found. Please install Node.js and npm first.');
+    return false;
+  }
 }
 
-if (!fs.existsSync(frontendNodeModules)) {
-  logWarning('Frontend node_modules not found. Installing dependencies...');
-  installFrontendDeps();
-}
-
-function installBackendDeps() {
+// Function to install dependencies
+function installDependencies(dir, name) {
   return new Promise((resolve, reject) => {
-    logInfo('Installing backend dependencies...');
-    const npmInstall = spawn('npm', ['install'], {
-      cwd: backendDir,
-      stdio: 'inherit'
+    logInfo(`Installing ${name} dependencies...`);
+    
+    // Try different approaches to run npm install
+    const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+    
+    const install = spawn(npmCommand, ['install'], {
+      cwd: dir,
+      stdio: 'inherit',
+      shell: true
     });
 
-    npmInstall.on('close', (code) => {
+    install.on('close', (code) => {
       if (code === 0) {
-        logSuccess('Backend dependencies installed successfully');
+        logSuccess(`${name} dependencies installed successfully`);
         resolve();
       } else {
-        logError(`Backend dependency installation failed with code ${code}`);
+        logError(`${name} dependency installation failed with code ${code}`);
         reject();
       }
+    });
+
+    install.on('error', (error) => {
+      logError(`Failed to start npm install for ${name}: ${error.message}`);
+      reject(error);
     });
   });
 }
 
-function installFrontendDeps() {
-  return new Promise((resolve, reject) => {
-    logInfo('Installing frontend dependencies...');
-    const npmInstall = spawn('npm', ['install'], {
-      cwd: frontendDir,
-      stdio: 'inherit'
-    });
+// Install dependencies if needed
+async function checkAndInstallDeps() {
+  if (!checkNpmAvailable()) {
+    process.exit(1);
+  }
 
-    npmInstall.on('close', (code) => {
-      if (code === 0) {
-        logSuccess('Frontend dependencies installed successfully');
-        resolve();
-      } else {
-        logError(`Frontend dependency installation failed with code ${code}`);
-        reject();
-      }
-    });
-  });
+  const promises = [];
+  
+  if (!fs.existsSync(backendNodeModules)) {
+    logWarning('Backend node_modules not found. Installing dependencies...');
+    promises.push(installDependencies(backendDir, 'backend'));
+  }
+
+  if (!fs.existsSync(frontendNodeModules)) {
+    logWarning('Frontend node_modules not found. Installing dependencies...');
+    promises.push(installDependencies(frontendDir, 'frontend'));
+  }
+
+  if (promises.length > 0) {
+    try {
+      await Promise.all(promises);
+    } catch (error) {
+      logError(`Dependency installation failed: ${error.message}`);
+      process.exit(1);
+    }
+  }
 }
 
-// Start both servers
-async function startServers() {
+// Start servers with proper error handling
+function startServers() {
   log('\n🚀 Starting World of Books Development Servers\n', 'cyan');
   log('=' .repeat(50), 'magenta');
   
+  let backendStarted = false;
+  let frontendStarted = false;
+
   // Start Backend
-  logInfo('Starting Backend Server (NestJS)...');
-  const backend = spawn('npm', ['run', 'start:dev'], {
-    cwd: backendDir,
-    stdio: ['pipe', 'pipe', 'pipe']
-  });
+  try {
+    logInfo('Starting Backend Server (NestJS)...');
+    
+    // Use execSync for Windows compatibility
+    const backendCommand = process.platform === 'win32' 
+      ? 'npm.cmd run start:dev' 
+      : 'npm run start:dev';
+    
+    const backend = spawn(backendCommand, [], {
+      cwd: backendDir,
+      stdio: ['pipe', 'pipe', 'pipe'],
+      shell: true
+    });
+
+    backend.stdout.on('data', (data) => {
+      const output = data.toString().trim();
+      if (output && !backendStarted) {
+        backendStarted = true;
+        log(`[BACKEND] ${output}`, 'green');
+      }
+    });
+
+    backend.stderr.on('data', (data) => {
+      const output = data.toString().trim();
+      if (output) {
+        log(`[BACKEND ERROR] ${output}`, 'red');
+      }
+    });
+
+    backend.on('close', (code) => {
+      if (code !== 0) {
+        logError(`Backend exited with code ${code}`);
+      }
+    });
+
+    backend.on('error', (error) => {
+      logError(`Backend failed to start: ${error.message}`);
+    });
+
+  } catch (error) {
+    logError(`Failed to start backend: ${error.message}`);
+  }
 
   // Start Frontend
-  logInfo('Starting Frontend Server (Next.js)...');
-  const frontend = spawn('npm', ['run', 'dev'], {
-    cwd: frontendDir,
-    stdio: ['pipe', 'pipe', 'pipe']
-  });
+  try {
+    logInfo('Starting Frontend Server (Next.js)...');
+    
+    const frontendCommand = process.platform === 'win32' 
+      ? 'cd frontend && npm.cmd run dev' 
+      : 'cd frontend && npm run dev';
+    
+    const frontend = spawn(frontendCommand, [], {
+      cwd: __dirname,
+      stdio: ['pipe', 'pipe', 'pipe'],
+      shell: true
+    });
 
-  // Handle backend output
-  backend.stdout.on('data', (data) => {
-    const output = data.toString().trim();
-    if (output) {
-      log(`[BACKEND] ${output}`, 'green');
-    }
-  });
+    frontend.stdout.on('data', (data) => {
+      const output = data.toString().trim();
+      if (output && !frontendStarted) {
+        frontendStarted = true;
+        log(`[FRONTEND] ${output}`, 'blue');
+      }
+    });
 
-  backend.stderr.on('data', (data) => {
-    const output = data.toString().trim();
-    if (output) {
-      log(`[BACKEND ERROR] ${output}`, 'red');
-    }
-  });
+    frontend.stderr.on('data', (data) => {
+      const output = data.toString().trim();
+      if (output) {
+        log(`[FRONTEND ERROR] ${output}`, 'red');
+      }
+    });
 
-  // Handle frontend output
-  frontend.stdout.on('data', (data) => {
-    const output = data.toString().trim();
-    if (output) {
-      log(`[FRONTEND] ${output}`, 'blue');
-    }
-  });
+    frontend.on('close', (code) => {
+      if (code !== 0) {
+        logError(`Frontend exited with code ${code}`);
+      }
+    });
 
-  frontend.stderr.on('data', (data) => {
-    const output = data.toString().trim();
-    if (output) {
-      log(`[FRONTEND ERROR] ${output}`, 'red');
-    }
-  });
+    frontend.on('error', (error) => {
+      logError(`Frontend failed to start: ${error.message}`);
+    });
 
-  // Handle process exit
-  backend.on('close', (code) => {
-    if (code !== 0) {
-      logError(`Backend exited with code ${code}`);
-    }
-  });
+  } catch (error) {
+    logError(`Failed to start frontend: ${error.message}`);
+  }
 
-  frontend.on('close', (code) => {
-    if (code !== 0) {
-      logError(`Frontend exited with code ${code}`);
-    }
-  });
-
-  // Handle process termination
-  process.on('SIGINT', () => {
-    log('\n\n🛑 Shutting down servers...\n', 'yellow');
-    backend.kill('SIGINT');
-    frontend.kill('SIGINT');
-    process.exit(0);
-  });
-
-  process.on('SIGTERM', () => {
-    log('\n\n🛑 Shutting down servers...\n', 'yellow');
-    backend.kill('SIGTERM');
-    frontend.kill('SIGTERM');
-    process.exit(0);
-  });
-
-  // Wait a moment for servers to start
+  // Wait for servers to start
   setTimeout(() => {
     log('\n🎉 Servers started successfully!\n', 'green');
     log('=' .repeat(50), 'magenta');
@@ -191,9 +229,21 @@ async function startServers() {
   }, 3000);
 }
 
+// Handle process termination
+process.on('SIGINT', () => {
+  log('\n\n🛑 Shutting down servers...\n', 'yellow');
+  process.exit(0);
+});
+
+process.on('SIGTERM', () => {
+  log('\n\n🛑 Shutting down servers...\n', 'yellow');
+  process.exit(0);
+});
+
 // Main execution
 async function main() {
   try {
+    await checkAndInstallDeps();
     await startServers();
   } catch (error) {
     logError(`Failed to start servers: ${error.message}`);
