@@ -71,8 +71,8 @@ const cleanTargets = [
   { path: '.vscode/extensions.json', type: 'file', description: 'VS Code extensions' },
   
   // Development scripts (keep only main ones)
-  { path: 'start-dev.js', type: 'file', description: 'Old development script' },
-  { path: 'start-dev-simple.js', type: 'file', description: 'Simple development script' },
+  { path: 'scripts/start-dev.js', type: 'file', description: 'Old development script' },
+  { path: 'scripts/start-dev-simple.js', type: 'file', description: 'Simple development script' },
 ];
 
 // Files to keep
@@ -83,8 +83,8 @@ const keepFiles = [
   '.env.example',
   '.env.local.example',
   'README.md',
-  'README-DEV.md',
-  'start-concurrent.js',
+  'scripts/',
+  'docs/',
   'tsconfig.json',
   'nest-cli.json',
   '.eslintrc.js',
@@ -120,7 +120,7 @@ function removePath(targetPath, description) {
 
 function cleanProject() {
   log('\n🧹 Starting Project Cleanup\n', 'cyan');
-  log('=' .repeat(50), 'cyan');
+  log('='.repeat(50), 'cyan');
   
   let removedCount = 0;
   let failedCount = 0;
