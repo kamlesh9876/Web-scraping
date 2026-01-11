@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { scrapingApi, systemApi } from '@/services/scraping';
 import { Button } from '@/components/Button';
-import { EnhancedStatusBadge as StatusBadge } from '@/components/StatusBadge/enhanced';
-import { LoadingSpinner } from '@/components/LoadingSpinner';
+import EnhancedStatusBadge from '@/components/StatusBadge/enhanced';
+import LoadingSpinner from '@/components/LoadingSpinner';
 import { ScrapeJob, SystemStatus } from '@/types/scraping';
 
 export default function Dashboard() {
@@ -242,10 +242,10 @@ export default function Dashboard() {
                 React.createElement(
                   'tr',
                   null,
-                  React.createElement(StatusBadge, {
-                    status: job.status,
-                    children: job.status
-                  }),
+                  React.createElement(EnhancedStatusBadge, {
+                        status: job.status,
+                        children: job.status
+                      }),
                   React.createElement('th', { className: 'px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider' }, 'Type'),
                   React.createElement('th', { className: 'px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider' }, 'Status'),
                   React.createElement('th', { className: 'px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider' }, 'Started'),
@@ -260,7 +260,7 @@ export default function Dashboard() {
                     'tr',
                     { key: job.id, className: index % 2 === 0 ? 'bg-white' : 'bg-gray-50' },
                     React.createElement('td', { className: 'px-4 py-2 text-sm text-gray-900' }, job.type),
-                    React.createElement('td', { className: 'px-4 py-2 text-sm' }, React.createElement(StatusBadge, { status: job.status })),
+                    React.createElement('td', { className: 'px-4 py-2 text-sm' }, React.createElement(EnhancedStatusBadge, { status: job.status })),
                     React.createElement('td', { className: 'px-4 py-2 text-sm text-gray-500' }, formatDate(job.startedAt)),
                     React.createElement('td', { className: 'px-4 py-2 text-sm text-gray-500' }, formatDate(job.completedAt))
                   )
