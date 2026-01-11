@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { scrapingApi, systemApi } from '@/services/scraping';
 import { Button } from '@/components/Button';
-import EnhancedStatusBadge from '@/components/StatusBadge';
+import EnhancedStatusBadge from '@/components/StatusBadge/enhanced';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { ScrapeJob, SystemStatus } from '@/types/scraping';
 
