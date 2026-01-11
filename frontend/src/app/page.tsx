@@ -14,8 +14,6 @@ export default function Dashboard() {
   // Fetch data on component mount
   useEffect(() => {
     fetchData();
-    const interval = setInterval(fetchData, 5000); // Refresh every 5 seconds
-    return () => clearInterval(interval);
   }, []);
 
   const fetchData = async () => {

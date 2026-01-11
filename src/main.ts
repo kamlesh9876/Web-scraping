@@ -11,6 +11,12 @@ async function bootstrap() {
     whitelist: true,
   }));
 
+  // Enable CORS for development
+  app.enableCors({
+    origin: ['http://localhost:3001', 'http://localhost:3000'],
+    credentials: true,
+  });
+
   const config = new DocumentBuilder()
     .setTitle('World of Books Scraper API')
     .setDescription('API for accessing scraped World of Books data')
