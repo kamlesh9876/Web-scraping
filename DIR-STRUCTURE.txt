@@ -1,0 +1,148 @@
+📁 WORLD OF BOOKS SCRAPER - DIRECTORY STRUCTURE
+==================================================
+
+🏠 ROOT LEVEL
+├── 📄 Configuration Files
+│   ├── package.json              # Main dependencies & scripts
+│   ├── package-lock.json         # Dependency lock file
+│   ├── tsconfig.json           # TypeScript configuration
+│   ├── nest-cli.json           # NestJS CLI config
+│   ├── .gitignore              # Git ignore rules
+│   ├── Dockerfile              # Docker configuration
+│   ├── .env                   # Environment variables (gitignored)
+│   └── .env.example           # Environment template
+│
+├── 📚 Documentation
+│   ├── README.md               # Main project documentation
+│   ├── README-DEV.md          # Development setup guide
+│   ├── PROJECT-STRUCTURE.md    # Structure overview
+│   ├── DUPLICATE-CLEANUP.md   # Cleanup report
+│   ├── PROJECT-AUDIT.md       # Health check report
+│   └── DIR-STRUCTURE.txt       # This file
+│
+├── 🛠️ Development Tools
+│   ├── start-concurrent.js      # Main development script
+│   ├── clean-project.js        # Project cleanup script
+│   └── find-duplicates.js      # Duplicate detection script
+│
+├── 📂 Backend (NestJS)
+│   └── src/
+│       ├── app.module.ts        # Root application module
+│       ├── main.ts             # Application entry point
+│       │
+│       └── modules/            # Feature modules
+│           ├── navigation/     # Navigation scraping
+│           │   ├── navigation.controller.ts
+│           │   ├── navigation.module.ts
+│           │   ├── navigation.schema.ts
+│           │   └── navigation.service.ts
+│           │
+│           ├── category/       # Category management
+│           │   ├── category.controller.ts
+│           │   ├── category.module.ts
+│           │   ├── category.schema.ts
+│           │   └── category.service.ts
+│           │
+│           ├── product/        # Product data handling
+│           │   ├── product.controller.ts
+│           │   ├── product.module.ts
+│           │   ├── product.schema.ts
+│           │   └── product.service.ts
+│           │
+│           ├── product-detail/ # Product detail scraping
+│           │   ├── product-detail.controller.ts
+│           │   ├── product-detail.module.ts
+│           │   ├── product-detail.schema.ts
+│           │   └── product-detail.service.ts
+│           │
+│           ├── review/         # Review system
+│           │   ├── review.controller.ts
+│           │   ├── review.module.ts
+│           │   ├── review.schema.ts
+│           │   └── review.service.ts
+│           │
+│           ├── scrape-job/     # Job tracking
+│           │   ├── scrape-job.controller.ts
+│           │   ├── scrape-job.module.ts
+│           │   ├── scrape-job.schema.ts
+│           │   └── scrape-job.service.ts
+│           │
+│           ├── queue/          # Queue management
+│           │   ├── queue-processor.ts
+│           │   ├── queue.module.ts
+│           │   ├── queue.processor.ts
+│           │   └── scraper.service.ts
+│           │
+│           └── common/         # Shared utilities
+│               ├── constants.ts
+│               └── utils.ts
+│
+└── 📂 Frontend (Next.js)
+    ├── 📄 Configuration
+    │   ├── package.json          # Frontend dependencies
+    │   ├── next.config.js        # Next.js configuration
+    │   ├── tailwind.config.js    # Tailwind CSS config
+    │   ├── tsconfig.json        # Frontend TS config
+    │   ├── next-env.d.ts        # Next.js types
+    │   └── .env.local.example   # Frontend env template
+    │
+    └── src/
+        ├── app/                  # App Router pages
+        │   ├── layout.tsx         # Root layout component
+        │   ├── page.tsx           # Home page
+        │   │
+        │   ├── about/             # About section
+        │   │   └── page.tsx
+        │   │
+        │   ├── category/          # Category pages
+        │   │   └── [slug]/
+        │   │       └── page.tsx
+        │   │
+        │   └── product/           # Product pages
+        │       └── [sourceId]/
+        │           └── page.tsx
+        │
+        ├── components/            # Reusable UI components
+        │   ├── Layout.tsx          # Main layout component
+        │   ├── LoadingSpinner.tsx  # Loading animation
+        │   ├── ProductCard.tsx     # Product display card
+        │   └── SearchBar.tsx       # Search input component
+        │
+        ├── hooks/                # Custom React hooks
+        │   ├── useNavigation.ts    # Navigation data hook
+        │   └── useProducts.ts     # Product data hook
+        │
+        ├── lib/                  # Utilities & API
+        │   └── api.ts            # API client configuration
+        │
+        └── types/                # TypeScript definitions
+            └── index.ts          # Type definitions
+
+==================================================
+
+📊 STRUCTURE SUMMARY:
+• Total main directories: 4 (root, backend, frontend, docs)
+• Backend modules: 7 (navigation, category, product, product-detail, review, scrape-job, queue)
+• Frontend pages: 4 (home, about, category, product)
+• Frontend components: 4 (layout, loading, product card, search)
+• Configuration files: 8 (package.json, tsconfig, next.config, etc.)
+• Documentation files: 5 (README, guides, reports)
+
+🎯 KEY FEATURES:
+• ✅ Modular backend architecture with NestJS
+• ✅ Modern frontend with Next.js 14 App Router
+• ✅ TypeScript throughout for type safety
+• ✅ Tailwind CSS for styling
+• ✅ React Query for data fetching
+• ✅ Comprehensive tooling and scripts
+• ✅ Clean, duplicate-free structure
+• ✅ Production-ready configuration
+
+🚀 READY FOR:
+• ✅ Development (npm run setup)
+• ✅ Testing (npm run test)
+• ✅ Building (npm run build)
+• ✅ Deployment (Docker + scripts)
+• ✅ Collaboration (clear docs + git)
+
+==================================================
