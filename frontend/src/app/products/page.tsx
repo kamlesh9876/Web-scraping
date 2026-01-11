@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { dataApi } from '@/services/scraping';
 import { Button } from '@/components/Button';
-import { Table } from '@/components/Table';
+import { Table, TableColumn } from '@/components/Table';
 import { ProductItem, CategoryItem, NavigationItem } from '@/types/scraping';
 
 export default function ProductsPage() {
@@ -70,7 +70,7 @@ export default function ProductsPage() {
     return `${currency} ${price.toFixed(2)}`;
   };
 
-  const columns = [
+  const columns: TableColumn<ProductItem>[] = [
     {
       key: 'imageUrl' as keyof ProductItem,
       header: 'Image',
@@ -172,8 +172,11 @@ export default function ProductsPage() {
           ),
           React.createElement(
             Button,
-            { onClick: () => fetchProducts(selectedCategory), disabled: loading || !selectedCategory },
-            'Refresh'
+            { 
+              onClick: () => fetchProducts(selectedCategory), 
+              disabled: loading || !selectedCategory,
+              children: 'Refresh'
+            }
           )
         ),
 
@@ -221,7 +224,7 @@ export default function ProductsPage() {
             { className: 'text-lg font-semibold text-gray-900 mb-4' },
             `Products for ${categories.find(c => c.slug === selectedCategory)?.title || 'Selected Category'}`
           ),
-          React.createElement(Table, {
+          React.createElement(Table<ProductItem>, {
             data: products,
             columns: columns,
             emptyMessage: 'No products available for this category. Start scraping to populate this table.',
@@ -244,10 +247,8 @@ export default function ProductsPage() {
                 {
                   onClick: () => handlePageChange(pagination.page - 1),
                   disabled: pagination.page === 1 || loading,
-                  variant: 'secondary',
-                  size: 'sm',
-                },
-                'Previous'
+                  children: 'Previous'
+                }
               ),
               React.createElement(
                 'span',
@@ -259,10 +260,8 @@ export default function ProductsPage() {
                 {
                   onClick: () => handlePageChange(pagination.page + 1),
                   disabled: pagination.page * pagination.limit >= pagination.total || loading,
-                  variant: 'secondary',
-                  size: 'sm',
-                },
-                'Next'
+                  children: 'Next'
+                }
               )
             )
           )

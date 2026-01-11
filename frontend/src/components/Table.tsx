@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface TableColumn<T> {
+export interface TableColumn<T> {
   key: keyof T;
   header: string;
   render?: (value: any, row: T) => React.ReactNode;
@@ -13,7 +13,7 @@ interface TableProps<T> {
   emptyMessage?: string;
 }
 
-export const Table = <T extends Record<string, any>>({
+export const Table = <T,>({
   data,
   columns,
   className = '',

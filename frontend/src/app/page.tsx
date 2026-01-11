@@ -187,8 +187,8 @@ export default function Dashboard() {
                 onClick: handleScrapeNavigation,
                 disabled: loading,
                 className: 'w-full',
-              },
-              'Scrape Navigation'
+                children: 'Scrape Navigation'
+              }
             ),
             React.createElement(
               Button,
@@ -197,8 +197,8 @@ export default function Dashboard() {
                 disabled: loading,
                 variant: 'secondary',
                 className: 'w-full',
-              },
-              'Scrape Categories'
+                children: 'Scrape Categories'
+              }
             ),
             React.createElement(
               Button,
@@ -207,8 +207,8 @@ export default function Dashboard() {
                 disabled: loading,
                 variant: 'secondary',
                 className: 'w-full',
-              },
-              'Scrape Products'
+                children: 'Scrape Products'
+              }
             )
           )
         ),

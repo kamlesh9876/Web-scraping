@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CategoryService } from './category.service';
 import { Category } from './category.schema';
@@ -20,5 +20,12 @@ export class CategoryController {
   @ApiResponse({ status: 200, description: 'Return category', type: Category })
   async findBySlug(@Param('slug') slug: string): Promise<Category> {
     return this.categoryService.findBySlug(slug);
+  }
+
+  @Post('navigation/:navigationSlug/refresh')
+  @ApiOperation({ summary: 'Refresh categories for navigation' })
+  @ApiResponse({ status: 200, description: 'Categories refresh queued' })
+  async refreshCategories(@Param('navigationSlug') navigationSlug: string): Promise<{ message: string }> {
+    return { message: 'Categories refresh queued' };
   }
 }

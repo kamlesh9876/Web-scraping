@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { dataApi } from '@/services/scraping';
 import { Button } from '@/components/Button';
-import { Table } from '@/components/Table';
+import { Table, TableColumn } from '@/components/Table';
 import { NavigationItem } from '@/types/scraping';
 
 export default function NavigationPage() {
@@ -30,7 +30,7 @@ export default function NavigationPage() {
     return new Date(dateString).toLocaleString();
   };
 
-  const columns = [
+  const columns: TableColumn<NavigationItem>[] = [
     {
       key: 'title' as keyof NavigationItem,
       header: 'Title',
@@ -106,8 +106,11 @@ export default function NavigationPage() {
           ),
           React.createElement(
             Button,
-            { onClick: fetchNavigation, disabled: loading },
-            'Refresh'
+            { 
+              onClick: fetchNavigation, 
+              disabled: loading,
+              children: 'Refresh'
+            }
           )
         ),
 
@@ -120,7 +123,7 @@ export default function NavigationPage() {
             { className: 'text-lg font-semibold text-gray-900 mb-4' },
             'Navigation Items'
           ),
-          React.createElement(Table, {
+          React.createElement(Table<NavigationItem>, {
             data: navigation,
             columns: columns,
             emptyMessage: 'No navigation data available. Start scraping to populate this table.',

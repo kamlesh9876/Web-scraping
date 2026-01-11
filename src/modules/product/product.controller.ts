@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query, Post } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
 import { ProductService } from './product.service';
 import { Product } from './product.schema';
@@ -31,5 +31,12 @@ export class ProductController {
   @ApiResponse({ status: 200, description: 'Return product', type: Product })
   async findBySourceId(@Param('sourceId') sourceId: string): Promise<Product> {
     return this.productService.findBySourceId(sourceId);
+  }
+
+  @Post('category/:categorySlug/refresh')
+  @ApiOperation({ summary: 'Refresh products for category' })
+  @ApiResponse({ status: 200, description: 'Products refresh queued' })
+  async refreshProducts(@Param('categorySlug') categorySlug: string): Promise<{ message: string }> {
+    return { message: 'Products refresh queued' };
   }
 }

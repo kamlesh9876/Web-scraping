@@ -30,7 +30,8 @@
     "clean:deps": "rm -rf node_modules frontend/node_modules",
     "clean:build": "rm -rf dist frontend/.next frontend/out",
     "clean:cache": "rm -rf .cache frontend/.cache logs coverage",
-    "reset": "npm run clean && npm run install:all"
+    "reset": "npm run clean && npm run install:all",
+    "start-all": "node start-all.js"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

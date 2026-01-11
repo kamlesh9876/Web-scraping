@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { dataApi } from '@/services/scraping';
 import { Button } from '@/components/Button';
-import { Table } from '@/components/Table';
+import { Table, TableColumn } from '@/components/Table';
 import { CategoryItem, NavigationItem } from '@/types/scraping';
 
 export default function CategoriesPage() {
@@ -53,7 +53,7 @@ export default function CategoriesPage() {
     return new Date(dateString).toLocaleString();
   };
 
-  const columns = [
+  const columns: TableColumn<CategoryItem>[] = [
     {
       key: 'title' as keyof CategoryItem,
       header: 'Title',
@@ -133,8 +133,11 @@ export default function CategoriesPage() {
           ),
           React.createElement(
             Button,
-            { onClick: () => fetchCategories(selectedNavigation), disabled: loading || !selectedNavigation },
-            'Refresh'
+            { 
+              onClick: () => fetchCategories(selectedNavigation), 
+              disabled: loading || !selectedNavigation,
+              children: 'Refresh'
+            }
           )
         ),
 
@@ -182,7 +185,7 @@ export default function CategoriesPage() {
             { className: 'text-lg font-semibold text-gray-900 mb-4' },
             `Categories for ${navigation.find(n => n.slug === selectedNavigation)?.title || 'Selected Navigation'}`
           ),
-          React.createElement(Table, {
+          React.createElement(Table<CategoryItem>, {
             data: categories,
             columns: columns,
             emptyMessage: 'No categories available for this navigation. Start scraping to populate this table.',

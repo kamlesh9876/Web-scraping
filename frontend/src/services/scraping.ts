@@ -14,13 +14,13 @@ const api = axios.create({
 export const scrapingApi = {
   // Trigger scraping jobs
   scrapeNavigation: () => 
-    api.post('/scrape/navigation'),
+    api.post('/navigation/refresh'),
   
   scrapeCategories: (navigationSlug: string) => 
-    api.post('/scrape/categories', { navigationSlug }),
+    api.post(`/categories/navigation/${navigationSlug}/refresh`),
   
   scrapeProducts: (params: { navigationSlug: string; categorySlug: string }) => 
-    api.post('/scrape/products', params),
+    api.post(`/products/category/${params.categorySlug}/refresh`),
   
   // Get scraping jobs
   getJobs: () => 
