@@ -242,10 +242,6 @@ export default function Dashboard() {
                 React.createElement(
                   'tr',
                   null,
-                  React.createElement(EnhancedStatusBadge, {
-                        status: job.status,
-                        children: job.status
-                      }),
                   React.createElement('th', { className: 'px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider' }, 'Type'),
                   React.createElement('th', { className: 'px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider' }, 'Status'),
                   React.createElement('th', { className: 'px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider' }, 'Started'),
